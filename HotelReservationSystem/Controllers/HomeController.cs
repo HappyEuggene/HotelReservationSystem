@@ -18,6 +18,12 @@ namespace HotelReservationSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
+            
+            return View();
+        }
+
+        public async Task<IActionResult> Hotels()
+        {
             var hotels = await _context.Hotels.Include(h => h.HotelRooms)
                                               .Include(h => h.Reservations)
                                               .Include(h => h.Reviews)
