@@ -1,0 +1,90 @@
+﻿@using HotelReservationSystem.ViewModels
+@model HotelViewModel
+
+@{
+    ViewData["Title"] = "Create Hotel";
+}
+
+<h2>Create Hotel</h2>
+
+<h4>Hotel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Hotel.Name" class="control-label"></label>
+                <input asp-for="Hotel.Name" class="form-control" />
+                <span asp-validation-for="Hotel.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hotel.RoomCount" class="control-label"></label>
+                <input asp-for="Hotel.RoomCount" class="form-control" />
+                <span asp-validation-for="Hotel.RoomCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hotel.VacationHotel" class="control-label"></label>
+                <input asp-for="Hotel.VacationHotel" type="checkbox" />
+                <span asp-validation-for="Hotel.VacationHotel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hotel.Description" class="control-label"></label>
+                <textarea asp-for="Hotel.Description" class="form-control"></textarea>
+                <span asp-validation-for="Hotel.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hotel.Contact" class="control-label"></label>
+                <input asp-for="Hotel.Contact" class="form-control" />
+                <span asp-validation-for="Hotel.Contact" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Picture" class="control-label">Hotel Picture</label>
+                <input asp-for="Picture" class="form-control" type="file" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
+            </div>
+
+            <h4>Address</h4>
+            <div class="form-group">
+                <label asp-for="Address.Country" class="control-label"></label>
+                <input asp-for="Address.Country" class="form-control" />
+                <span asp-validation-for="Address.Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address.City" class="control-label"></label>
+                <input asp-for="Address.City" class="form-control" />
+                <span asp-validation-for="Address.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address.Region" class="control-label"></label>
+                <input asp-for="Address.Region" class="form-control" />
+                <span asp-validation-for="Address.Region" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address.Street" class="control-label"></label>
+                <input asp-for="Address.Street" class="form-control" />
+                <span asp-validation-for="Address.Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address.PostalCode" class="control-label"></label>
+                <input asp-for="Address.PostalCode" class="form-control" />
+                <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
+            </div>
+
+            <h4>Add Rooms</h4>
+            <div class="form-group">
+                <label asp-for="BulkAddRooms.PricePerNight" class="control-label"></label>
+                <input asp-for="BulkAddRooms.PricePerNight" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="BulkAddRooms.PricePerNight" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-2">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

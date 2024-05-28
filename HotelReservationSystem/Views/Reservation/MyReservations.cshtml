@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Reservation>
+
+@{
+    ViewData["Title"] = "My Reservations";
+}
+
+<h2>My Reservations</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Hotel Name</th>
+            <th>Room number</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Total Price</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reservation in Model)
+        {
+            @foreach (var hotelReservation in reservation.HotelReservations)
+            {
+                <tr>
+                    <td>@hotelReservation.Hotel.Name</td>
+                    <td>@reservation.Room.RoomNumber</td>
+                    <td>@reservation.StartDate.ToShortDateString()</td>
+                    <td>@reservation.EndDate.ToShortDateString()</td>
+                    <td>@reservation.TotalPrice.ToString("C")</td>
+                    <td>@reservation.Status</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Back to Home</a>
+</div>

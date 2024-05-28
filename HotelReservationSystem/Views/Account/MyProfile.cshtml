@@ -1,0 +1,221 @@
+﻿@using HotelReservationSystem.ViewModels
+@model MyProfileViewModel
+
+@{
+    ViewData["Title"] = "Мій профіль";
+}
+
+<style>
+    .profile-page {
+        display: flex;
+        max-width: 1200px;
+        margin: 50px auto;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .sidebar {
+        width: 250px;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-right: 30px;
+    }
+
+        .sidebar .nav-link {
+            color: #333;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+            .sidebar .nav-link:hover {
+                text-decoration: underline;
+            }
+
+            .sidebar .nav-link img {
+                margin-right: 10px;
+            }
+
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
+
+        .content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        .content dl dt {
+            font-weight: 600;
+        }
+
+        .content dl dd {
+            margin-bottom: 15px;
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #FFDEAD;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+        .top-nav .nav-item {
+            margin-right: 10px;
+        }
+
+        .top-nav .nav-link {
+            background-color: #D3D3D3;
+            border-radius: 10px;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+            .top-nav .nav-link:hover {
+                background-color: #e0e0e0;
+            }
+
+    .footer-nav {
+        background-color: #343a40;
+        padding: 20px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+        .footer-nav .nav-link {
+            color: #fff !important;
+            font-size: 1.1rem;
+            padding: 0 15px;
+        }
+
+            .footer-nav .nav-link:hover {
+                color: #007bff !important;
+                text-decoration: underline;
+            }
+
+    .footer-divider {
+        color: #fff;
+        margin: 0 10px;
+    }
+
+    .bottom-divider {
+        border-bottom: 2px solid #007bff;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="top-nav">
+    <ul class="navbar-nav d-flex flex-row">
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Головна сторінка</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Hotels">Дивитись усі готелі</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Reservation" asp-action="MyReservations">Мої резервації</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav d-flex flex-row">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="MyProfile">Мій профіль</a>
+            </li>
+            <li class="nav-item">
+                <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
+                    <button type="submit" class="nav-link btn btn-link" style="border: none;">Вийти</button>
+                </form>
+            </li>
+        }
+    </ul>
+</div>
+
+<div class="profile-page">
+    <div class="sidebar">
+        <h4>Меню</h4>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Персональні дані</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Уподобання</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Безпека</a>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>Мій профіль</h2>
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FirstName)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.FirstName)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LastName)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.LastName)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PhoneNumber)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.PhoneNumber)</dd>
+        </dl>
+        <div class="form-group">
+            <a asp-controller="Account" asp-action="MyProfileEdit" class="btn btn-primary">Edit profile</a>
+        </div>
+    </div>
+</div>
+
+<footer class="footer-nav">
+    <div class="container">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Contacts" asp-action="Index">Контакти</a>
+            </li>
+            <li class="footer-divider">|</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Terms" asp-action="Index">Умови використання</a>
+            </li>
+            <li class="footer-divider">|</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Політика конфіденційності</a>
+            </li>
+        </ul>
+    </div>
+</footer>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,122 @@
+﻿@model Hotel
+
+@{
+    ViewData["Title"] = "Hotel Details";
+}
+
+<h2>@Model.Name</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <img src="@Model.PictureUrl" alt="@Model.Name" class="img-fluid" />
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.VacationHotel)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.VacationHotel)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Contact)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Contact)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Rating)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Rating) (Average)
+            </dd>
+            <dt class="col-sm-3">
+                Address
+            </dt>
+            <dd class="col-sm-9">
+                @if (Model.Address != null)
+                {
+                    <div>
+                        @Model.Address.Country, @Model.Address.City, @Model.Address.Region, @Model.Address.Street, @Model.Address.PostalCode
+                    </div>
+                }
+                else
+                {
+                    <div>No address available</div>
+                }
+            </dd>
+        </dl>
+
+        <h4>Hotel Rooms</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Room number</th>
+                    <th>Price Per Night</th>
+                    <th>Is Available</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model.Rooms)
+                {
+                    <tr>
+                        <td>@room.RoomNumber</td>
+                        <td>@room.PricePerNight</td>
+                        <td>@room.IsAvailable</td>
+                        <td>
+                            @if (room.IsAvailable)
+                            {
+                                <a asp-action="Create" asp-controller="Reservation" asp-route-hotelId="@Model.Id" asp-route-roomId="@room.Id" class="btn btn-primary">Reserve</a>
+                            }
+                            else
+                            {
+                                <span class="text-danger">Not Available</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h4>Reviews</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Comment</th>
+                    <th>Rating</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var review in Model.Reviews)
+                {
+                    <tr>
+                        <td>@review.Comment</td>
+                        <td>@review.Rating</td>
+                        <td>@review.Date</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+    <a asp-action="AddReview" asp-route-hotelId="@Model.Id" class="btn btn-primary">Add Review</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

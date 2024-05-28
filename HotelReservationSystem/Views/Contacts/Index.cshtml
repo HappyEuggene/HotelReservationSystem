@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Контактна інформація";
+}
+
+<style>
+    .contact-container {
+        background-color: #f8f9fa;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .contact-header {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #343a40;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #007bff;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+
+    .contact-details {
+        font-size: 1.2rem;
+        color: #6c757d;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .contact-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .contact-list li {
+            margin: 20px 0;
+            font-size: 1.3rem;
+            color: #495057;
+        }
+
+            .contact-list li i {
+                margin-right: 10px;
+                color: #007bff;
+                font-size: 1.5rem;
+            }
+
+    .contact-footer {
+        font-size: 1rem;
+        color: #6c757d;
+        margin-top: 30px;
+        border-top: 1px solid #dee2e6;
+        padding-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="contact-container">
+                <div class="contact-header">Контактна інформація</div>
+                <div class="contact-details">
+                    Зверніть увагу, що ми не є туристичним агентством і не є власниками цих готелів!
+                    Якщо вам потрібна допомога в бронюванні або виникли проблеми з сайтом, ми готові надати допомогу.
+                    Знайшли помилку? Надсилайте на пошту!
+                </div>
+                <ul class="contact-list">
+                    <li><i class="fas fa-envelope"></i>Email: lolitsizigg@gmail.com</li>
+                    <li><i class="fas fa-phone"></i>Phone: (380) 930899722</li>
+                    <li><i class="fas fa-map-marker-alt"></i>Address: Bulahovskogo, Kyiv, Ukraine</li>
+                </ul>
+                <div class="contact-footer">
+                    &copy; @DateTime.Now.Year - HotelReservationSystem
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+}

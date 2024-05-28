@@ -43,7 +43,7 @@ namespace HotelReservationSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(HotelRoom room)
+        public async Task<IActionResult> Create(Room room)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +66,7 @@ namespace HotelReservationSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, HotelRoom room)
+        public async Task<IActionResult> Edit(int id, Room room)
         {
             if (id != room.Id)
             {
