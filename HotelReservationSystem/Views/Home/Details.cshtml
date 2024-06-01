@@ -311,6 +311,11 @@
                                 {
                                     <span class="text-danger">Not Available</span>
                                 }
+                                @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
+                                {
+                                    <a asp-action="EditRoom" asp-controller="Room" asp-route-id="@room.Id" class="btn btn-primary">Edit</a>
+
+                                }
                             </td>
                         </tr>
                     }
