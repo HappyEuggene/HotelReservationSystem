@@ -6,16 +6,16 @@
 
 <style>
     body {
-        background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
+        background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
         background-size: cover;
     }
 
     .hotel-container {
         background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
+        padding: 40px;
         border-radius: 10px;
         text-align: center;
-        max-width: 1200px;
+        max-width: 2000px;
         margin: 30px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
@@ -30,6 +30,7 @@
         width: 100%;
         margin-top: 20px;
         border-collapse: collapse;
+        background-color: #FFFAFA;
     }
 
         .hotel-table th,
@@ -39,7 +40,8 @@
         }
 
         .hotel-table th {
-            background-color: #f2f2f2;
+            background-color: #e6e6e6;
+            font-size: 1.05rem; /* Збільшення розміру шрифту */
         }
 
         .hotel-table tr:nth-child(even) {
@@ -47,18 +49,40 @@
         }
 
         .hotel-table img {
-            max-width: 100px;
+            max-width: 220px; /* Increased the max width */
             height: auto;
             border-radius: 5px;
         }
 
+        .hotel-table tr {
+            border-bottom: 1px solid #ccc; /* Grey line after each row */
+        }
+
+    .btn-container-wrapper {
+        display: flex;
+        justify-content: center;
+        background-color: #d4d4d4; /* Gray background for the button container */
+        border-radius: 10px;
+        padding: 20px 0px;
+    }
+
+    .btn-container {
+        display: flex;
+        flex-direction: column; /* Arrange buttons in a column */
+        align-items: center; /* Center buttons */
+    }
+
     .btn-primary,
     .btn-info,
-    .btn-danger {
-        padding: 10px 20px;
-        font-size: 16px;
+    .btn-danger,
+    .btn-details,
+    .btn-edit {
+        padding: 5px 1px; /* Adjust padding for uniform button size */
+        font-size: 14px; /* Smaller font size */
         border-radius: 5px;
         transition: background-color 0.3s ease;
+        margin: 5px 0; /* Margin between buttons */
+        width: 80px; /* Fixed width for buttons */
     }
 
     .btn-primary {
@@ -74,14 +98,28 @@
     }
 
     .btn-danger {
-        background-color: #dc3545;
+        background: linear-gradient(to right, #B22222, #8B0000);
+        border: none;
+        color: white;
+    }
+
+    .btn-details {
+        background: linear-gradient(to right, #6B8E23, #556B2F );
+        border: none;
+        color: white;
+    }
+
+    .btn-edit {
+        background: linear-gradient(to right, #008000, #006400);
         border: none;
         color: white;
     }
 
         .btn-primary:hover,
         .btn-info:hover,
-        .btn-danger:hover {
+        .btn-danger:hover,
+        .btn-details:hover,
+        .btn-edit:hover {
             opacity: 0.8;
         }
 
@@ -140,6 +178,24 @@
     .navbar-background {
         background-color: transparent;
     }
+
+    .btn-create-container {
+        display: flex;
+        justify-content: flex-start; /* Aligns the button to the left */
+        margin-bottom: 20px; /* Adds space below the button */
+    }
+
+    .btn-create {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold; /* Makes the text bold */
+        border-radius: 5px;
+        background: linear-gradient(to right, #005ce6, #00bfff);
+        border: none;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
 </style>
 
 <header>
@@ -176,21 +232,22 @@
 </header>
 
 <div class="hotel-container">
-    <h1 class="hotel-title">Hotels</h1>
+    <h1 class="hotel-title">Готелі</h1>
 
-    <p>
+    <div class="btn-create-container">
         @if (User.IsInRole("Administrator"))
         {
-            <a class="btn btn-primary" asp-action="Create">Create New Hotel</a>
+            <a class="btn btn-create" asp-action="Create">Додати готель</a>
         }
-    </p>
+    </div>
 
     <table class="hotel-table">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(model => model.Name)</th>
-                <th>@Html.DisplayNameFor(model => model.Rating)</th>
-                <th>Photo</th>
+                <th>Фото</th>
+                <th>Назва</th>
+                <th>Місто</th>
+                <th>Рейтинг</th>
                 <th></th>
             </tr>
         </thead>
@@ -198,18 +255,23 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Rating)</td>
                     <td>
                         <img src="@item.PictureUrl" alt="@item.Name" />
                     </td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Address.City)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Rating)</td>
                     <td>
-                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
-                        {
-                            <a class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        }
+                        <div class="btn-container-wrapper">
+                            <div class="btn-container">
+                                <a class="btn btn-details" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
+                                {
+                                    <a class="btn btn-edit" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                }
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }

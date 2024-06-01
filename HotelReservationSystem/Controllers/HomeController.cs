@@ -247,13 +247,13 @@ namespace HotelReservationSystem.Controllers
                 {
                     if (model.Picture != null)
                     {
-                        var containerClient = _blobServiceClient.GetBlobContainerClient("hotelcontainer");
-                        await containerClient.CreateIfNotExistsAsync();
+                        var containerClient = _blobServiceClient.GetBlobContainerClient("forhotel");
+
                         var blobClient = containerClient.GetBlobClient(model.Picture.FileName);
 
                         await using (var stream = model.Picture.OpenReadStream())
                         {
-                            await blobClient.UploadAsync(stream, true);
+                            await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = "image/jpeg" });
                         }
 
                         model.Hotel.PictureUrl = blobClient.Uri.ToString();

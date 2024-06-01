@@ -2,14 +2,14 @@
 @model MyProfileViewModel
 
 @{
-    ViewData["Title"] = "Create Profile";
+    ViewData["Title"] = "Edit Profile";
 }
 
-<h2>Create Profile</h2>
+<h2>Редагування профілю</h2>
 
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="MyProfile" method="post">
+        <form asp-action="MyProfile" method="post" id="profileForm">
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="form-group">
@@ -32,10 +32,34 @@
 
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input asp-for="PhoneNumber" class="form-control" type="tel" pattern="[0-9]+" title="Please enter numbers only" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            
+
+            <div class="form-group">
+                <label asp-for="BirthDate" class="control-label"></label>
+                <input asp-for="BirthDate" class="form-control" type="date" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Nationality" class="control-label"></label>
+                <input asp-for="Nationality" class="form-control" />
+                <span asp-validation-for="Nationality" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ResidentialAddress" class="control-label"></label>
+                <input asp-for="ResidentialAddress" class="form-control" />
+                <span asp-validation-for="ResidentialAddress" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Update profile" class="btn btn-primary" />
             </div>
@@ -45,4 +69,22 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById("profileForm").addEventListener("submit", function(event) {
+            var phoneNumber = document.querySelector('input[name="PhoneNumber"]').value;
+            var birthDate = document.querySelector('input[name="BirthDate"]').value;
+
+            var phonePattern = /^[0-9]+$/;
+
+            if (!phonePattern.test(phoneNumber)) {
+                event.preventDefault();
+                alert("Please enter a valid phone number (numbers only).");
+            }
+
+            if (birthDate && isNaN(Date.parse(birthDate))) {
+                event.preventDefault();
+                alert("Please enter a valid birth date.");
+            }
+        });
+    </script>
 }

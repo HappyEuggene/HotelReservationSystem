@@ -117,14 +117,14 @@ namespace HotelReservationSystem.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                TempData["Error"] = "Почты не существует!";
+                TempData["Error"] = "Пошти не існує!";
                 return View(model);
             }
 
             var passwordCheck = await _userManager.CheckPasswordAsync(user, model.Password);
             if (!passwordCheck)
             {
-                TempData["Error"] = "Неверный пароль!";
+                TempData["Error"] = "Невірний пароль!";
                 return View(model);
             }
 
@@ -151,7 +151,7 @@ namespace HotelReservationSystem.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
-                    ModelState.AddModelError(string.Empty, "An account with this email already exists.");
+                    ModelState.AddModelError(string.Empty, "Аккаунт з цією поштою вже існує.");
                     return View(model);
                 }
 
@@ -192,7 +192,11 @@ namespace HotelReservationSystem.Controllers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                BirthDate = user.BirthDate,
+                Nationality = user.Nationality,
+                Gender = user.Gender,
+                ResidentialAddress = user.ResidentialAddress
             };
 
             return View(model);
@@ -211,7 +215,11 @@ namespace HotelReservationSystem.Controllers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                BirthDate = user.BirthDate,
+                Nationality = user.Nationality,
+                Gender = user.Gender,
+                ResidentialAddress = user.ResidentialAddress
             };
 
             return View("MyProfileEdit", model);
@@ -232,6 +240,10 @@ namespace HotelReservationSystem.Controllers
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
+                user.BirthDate = model.BirthDate;
+                user.Nationality = model.Nationality;
+                user.Gender = model.Gender;
+                user.ResidentialAddress = model.ResidentialAddress;
 
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)

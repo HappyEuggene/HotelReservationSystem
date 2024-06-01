@@ -5,85 +5,247 @@
     ViewData["Title"] = "Create Hotel";
 }
 
-<h2>Create Hotel</h2>
+<style>
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
 
-<h4>Hotel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Hotel.Name" class="control-label"></label>
-                <input asp-for="Hotel.Name" class="form-control" />
-                <span asp-validation-for="Hotel.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Hotel.RoomCount" class="control-label"></label>
-                <input asp-for="Hotel.RoomCount" class="form-control" />
-                <span asp-validation-for="Hotel.RoomCount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Hotel.VacationHotel" class="control-label"></label>
-                <input asp-for="Hotel.VacationHotel" type="checkbox" />
-                <span asp-validation-for="Hotel.VacationHotel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Hotel.Description" class="control-label"></label>
-                <textarea asp-for="Hotel.Description" class="form-control"></textarea>
-                <span asp-validation-for="Hotel.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Hotel.Contact" class="control-label"></label>
-                <input asp-for="Hotel.Contact" class="form-control" />
-                <span asp-validation-for="Hotel.Contact" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Picture" class="control-label">Hotel Picture</label>
-                <input asp-for="Picture" class="form-control" type="file" />
-                <span asp-validation-for="Picture" class="text-danger"></span>
-            </div>
+    .form-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        text-align: left; /* Ensures form elements are aligned to the left */
+        max-width: 1200px;
+        margin: 30px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-            <h4>Address</h4>
-            <div class="form-group">
-                <label asp-for="Address.Country" class="control-label"></label>
-                <input asp-for="Address.Country" class="form-control" />
-                <span asp-validation-for="Address.Country" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address.City" class="control-label"></label>
-                <input asp-for="Address.City" class="form-control" />
-                <span asp-validation-for="Address.City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address.Region" class="control-label"></label>
-                <input asp-for="Address.Region" class="form-control" />
-                <span asp-validation-for="Address.Region" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address.Street" class="control-label"></label>
-                <input asp-for="Address.Street" class="form-control" />
-                <span asp-validation-for="Address.Street" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address.PostalCode" class="control-label"></label>
-                <input asp-for="Address.PostalCode" class="form-control" />
-                <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
-            </div>
+    .form-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 
-            <h4>Add Rooms</h4>
-            <div class="form-group">
-                <label asp-for="BulkAddRooms.PricePerNight" class="control-label"></label>
-                <input asp-for="BulkAddRooms.PricePerNight" class="form-control" type="number" step="0.01" />
-                <span asp-validation-for="BulkAddRooms.PricePerNight" class="text-danger"></span>
-            </div>
+    .form-group label {
+        font-size: 1.05rem;
+        padding-top: 20px;
+    }
 
-            <div class="form-group mt-2">
-                <input type="submit" value="Create" class="btn btn-primary" />
+    .btn-primary {
+        background: linear-gradient(to right, #005ce6, #00bfff);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin: 20px auto 0;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #005ce6, #00bfff);
+        }
+
+    .navbar-nav .nav-link,
+    .navbar-nav .btn-link {
+        background-color: #D3D3D3;
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin: 0 5px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+    }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .btn-link:hover {
+            background-color: #e0e0e0;
+        }
+
+    .navbar {
+        border-radius: 10px;
+        padding: 10px 20px;
+    }
+
+        .navbar .nav-item .nav-link {
+            color: #333;
+        }
+
+            .navbar .nav-item .nav-link:hover {
+                color: #000;
+            }
+
+    .footer-nav {
+        background-color: #343a40;
+        padding: 20px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+        .footer-nav .nav-link {
+            color: #fff !important;
+            font-size: 1.1rem;
+            padding: 0 15px;
+        }
+
+            .footer-nav .nav-link:hover {
+                color: #007bff !important;
+                text-decoration: underline;
+            }
+
+    .footer-divider {
+        color: #fff;
+        margin: 0 10px;
+    }
+
+    .navbar-background {
+        background-color: transparent;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin-top: 50px; /* Adds space above the section title */
+    }
+</style>
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light navbar-background border-bottom box-shadow mb-3 rounded">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Головна сторінка</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="MyReservations">Мої резервації</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Hotels">Дивитись усі готелі</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="MyProfile">Мій профіль</a>
+                        </li>
+                        <li class="nav-item">
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
+                                <button type="submit" class="nav-link text-dark btn btn-link" style="border: none;">Вийти</button>
+                            </form>
+                        </li>
+                    }
+                </ul>
             </div>
-        </form>
+        </div>
+    </nav>
+</header>
+
+<div class="form-container">
+    <h2 class="form-title">Додайте свій готель з нами !</h2>
+    <h4 class="section-title">Додайте опис вашого готелю</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Ensures form elements are aligned to the left -->
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Hotel.Name" class="control-label">Назва готелю</label>
+                    <input asp-for="Hotel.Name" class="form-control" />
+                    <span asp-validation-for="Hotel.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Hotel.RoomCount" class="control-label">Кількість кімнат</label>
+                    <input asp-for="Hotel.RoomCount" class="form-control" />
+                    <span asp-validation-for="Hotel.RoomCount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Hotel.VacationHotel" class="control-label">Ваш готель для відпочинку ?</label>
+                    <input asp-for="Hotel.VacationHotel" type="checkbox" />
+                    <span asp-validation-for="Hotel.VacationHotel" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Hotel.Description" class="control-label">Опишіть Ваш готель (Від 2 речень)</label>
+                    <textarea asp-for="Hotel.Description" class="form-control"></textarea>
+                    <span asp-validation-for="Hotel.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Hotel.Contact" class="control-label">Залиште контакт для зв'язку (Пошта, телефон итд.)</label>
+                    <input asp-for="Hotel.Contact" class="form-control" />
+                    <span asp-validation-for="Hotel.Contact" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Picture" class="control-label">Додайте фото готелю</label>
+                    <input asp-for="Picture" class="form-control" type="file" />
+                    <span asp-validation-for="Picture" class="text-danger"></span>
+                </div>
+
+                <h4 class="section-title">Місце знаходження готелю</h4>
+                <div class="form-group">
+                    <label asp-for="Address.Country" class="control-label">Країна</label>
+                    <input asp-for="Address.Country" class="form-control" />
+                    <span asp-validation-for="Address.Country" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address.City" class="control-label">Місто</label>
+                    <input asp-for="Address.City" class="form-control" />
+                    <span asp-validation-for="Address.City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address.Region" class="control-label">Регіон</label>
+                    <input asp-for="Address.Region" class="form-control" />
+                    <span asp-validation-for="Address.Region" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address.Street" class="control-label">Вулиця</label>
+                    <input asp-for="Address.Street" class="form-control" />
+                    <span asp-validation-for="Address.Street" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address.PostalCode" class="control-label">Поштовий індекс</label>
+                    <input asp-for="Address.PostalCode" class="form-control" />
+                    <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
+                </div>
+
+                <h4></h4>
+                <div class="form-group">
+                    <label asp-for="BulkAddRooms.PricePerNight" class="control-label">Ціна за одну ніч</label>
+                    <input asp-for="BulkAddRooms.PricePerNight" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="BulkAddRooms.PricePerNight" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-2">
+                    <input type="submit" value="Створити !" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+<footer class="footer-nav">
+    <div class="container">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Contacts" asp-action="Index">Контакти</a>
+            </li>
+            <li class="footer-divider">|</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Terms" asp-action="Index">Умови використання</a>
+            </li>
+            <li class="footer-divider">|</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Політика конфіденційності</a>
+            </li>
+        </ul>
+    </div>
+</footer>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
