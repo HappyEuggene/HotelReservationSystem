@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace HotelReservationSystem.Models
+namespace HotelReservationSystem.ViewModels
 {
     public class RoomAmenitiesViewModel
     {
@@ -21,4 +21,5 @@ namespace HotelReservationSystem.Models
         public int AmenityId { get; set; }
         public int HotelRoomId { get; set; }
     }
+
 }

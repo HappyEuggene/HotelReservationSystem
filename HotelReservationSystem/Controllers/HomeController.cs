@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace HotelReservationSystem.Controllers
 {
@@ -334,6 +335,69 @@ namespace HotelReservationSystem.Controllers
         private bool HotelExists(int id)
         {
             return _context.Hotels.Any(e => e.Id == id);
+        }
+        private readonly IHotelService _hotelService;
+
+        public HomeController(IHotelService hotelService)
+        {
+            _hotelService = hotelService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var hotels = await _hotelService.GetAllHotelsAsync();
+            return View(hotels);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var hotel = await _hotelService.GetHotelByIdAsync(id);
+            var viewModel = new HotelDetailsViewModel
+            {
+                Hotel = hotel,
+                Rooms = hotel.Rooms.Select(r => new RoomAmenitiesViewModel
+                {
+                    RoomId = r.Id,
+                    RoomNumber = r.RoomNumber,
+                    PricePerNight = r.PricePerNight,
+                    IsAvailable = r.IsAvailable,
+                    Rating = r.Rating,
+                    Amenities = r.Amenities.Select(a => new AmenityViewModel
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Description = a.Description,
+                        AmenityId = a.AmenityId,
+                        HotelRoomId = a.HotelRoomId
+                    }).ToList()
+                }).ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRoom(RoomAmenitiesViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _hotelService.UpdateRoomAsync(viewModel);
+                return RedirectToAction(nameof(Details), new { id = viewModel.RoomId });
+            }
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAmenity(AmenityViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _hotelService.AddAmenityAsync(viewModel);
+                return RedirectToAction(nameof(Details), new { id = viewModel.HotelRoomId });
+            }
+            return View(viewModel);
         }
     }
 }
