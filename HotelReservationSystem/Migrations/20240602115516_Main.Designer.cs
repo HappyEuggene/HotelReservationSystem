@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelReservationSystem.Migrations
 {
     [DbContext(typeof(HotelDbContext))]
-    [Migration("20240528123627_main")]
-    partial class main
+    [Migration("20240602115516_Main")]
+    partial class Main
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,23 +149,15 @@ namespace HotelReservationSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AmenityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("HotelRoomId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HotelRoomId");
 
                     b.ToTable("RoomAmenities");
                 });
@@ -474,6 +466,9 @@ namespace HotelReservationSystem.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("PricePerNight")
                         .HasColumnType("float");
 
@@ -488,6 +483,21 @@ namespace HotelReservationSystem.Migrations
                     b.HasIndex("HotelId");
 
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("RoomRoomAmenity", b =>
+                {
+                    b.Property<int>("HotelRoomsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomAmenitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HotelRoomsId", "RoomAmenitiesId");
+
+                    b.HasIndex("RoomAmenitiesId");
+
+                    b.ToTable("RoomRoomAmenity");
                 });
 
             modelBuilder.Entity("Hotel", b =>
@@ -520,15 +530,6 @@ namespace HotelReservationSystem.Migrations
                     b.Navigation("Hotel");
 
                     b.Navigation("Reservation");
-                });
-
-            modelBuilder.Entity("HotelReservationSystem.Models.RoomAmenity", b =>
-                {
-                    b.HasOne("Room", "HotelRoom")
-                        .WithMany("RoomAmenities")
-                        .HasForeignKey("HotelRoomId");
-
-                    b.Navigation("HotelRoom");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -622,6 +623,21 @@ namespace HotelReservationSystem.Migrations
                     b.Navigation("Hotel");
                 });
 
+            modelBuilder.Entity("RoomRoomAmenity", b =>
+                {
+                    b.HasOne("Room", null)
+                        .WithMany()
+                        .HasForeignKey("HotelRoomsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelReservationSystem.Models.RoomAmenity", null)
+                        .WithMany()
+                        .HasForeignKey("RoomAmenitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Hotel", b =>
                 {
                     b.Navigation("HotelReservations");
@@ -646,11 +662,6 @@ namespace HotelReservationSystem.Migrations
             modelBuilder.Entity("Reservation", b =>
                 {
                     b.Navigation("HotelReservations");
-                });
-
-            modelBuilder.Entity("Room", b =>
-                {
-                    b.Navigation("RoomAmenities");
                 });
 #pragma warning restore 612, 618
         }

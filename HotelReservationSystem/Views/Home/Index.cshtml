@@ -125,6 +125,15 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="MyReservations">Мої резервації</a>
                     </li>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
+                    {
+                        <li class="nav-item">
+                            <a asp-action="RoomAmenities" asp-controller="Admin" class="nav-link text-dark">Всі зручності для номеру</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="AllUsers" asp-controller="Admin" class="nav-link text-dark">Всі користувачі</a>
+                        </li>
+                    }
                 </ul>
                 <ul class="navbar-nav">
                     @if (User.Identity.IsAuthenticated)

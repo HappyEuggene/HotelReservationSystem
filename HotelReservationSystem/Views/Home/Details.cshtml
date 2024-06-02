@@ -41,7 +41,7 @@
 
         .hotel-table th {
             background-color: #e6e6e6;
-            font-size: 1.05rem; /* Збільшення розміру шрифту */
+            font-size: 1.05rem;
         }
 
         .hotel-table tr:nth-child(even) {
@@ -49,40 +49,26 @@
         }
 
         .hotel-table img {
-            max-width: 220px; /* Increased the max width */
+            max-width: 220px;
             height: auto;
             border-radius: 5px;
         }
 
         .hotel-table tr {
-            border-bottom: 1px solid #ccc; /* Grey line after each row */
+            border-bottom: 1px solid #ccc;
         }
-
-    .btn-container-wrapper {
-        display: flex;
-        justify-content: center;
-        background-color: #d4d4d4; /* Gray background for the button container */
-        border-radius: 10px;
-        padding: 20px 0px;
-    }
-
-    .btn-container {
-        display: flex;
-        flex-direction: column; /* Arrange buttons in a column */
-        align-items: center; /* Center buttons */
-    }
 
     .btn-primary,
     .btn-info,
     .btn-danger,
     .btn-details,
     .btn-edit {
-        padding: 5px 1px; /* Adjust padding for uniform button size */
-        font-size: 14px; /* Smaller font size */
+        padding: 5px 1px;
+        font-size: 14px;
         border-radius: 5px;
         transition: background-color 0.3s ease;
-        margin: 5px 0; /* Margin between buttons */
-        width: 80px; /* Fixed width for buttons */
+        margin: 5px 0;
+        width: 100px; /* Increase width of buttons */
     }
 
     .btn-primary {
@@ -104,7 +90,7 @@
     }
 
     .btn-details {
-        background: linear-gradient(to right, #6B8E23, #556B2F );
+        background: linear-gradient(to right, #6B8E23, #556B2F);
         border: none;
         color: white;
     }
@@ -179,22 +165,34 @@
         background-color: transparent;
     }
 
-    .btn-create-container {
-        display: flex;
-        justify-content: flex-start; /* Aligns the button to the left */
-        margin-bottom: 20px; /* Adds space below the button */
+    .dl-horizontal dt {
+        float: left;
+        clear: left;
+        width: 160px;
+        overflow: hidden;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-right: 10px;
     }
 
-    .btn-create {
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold; /* Makes the text bold */
-        border-radius: 5px;
-        background: linear-gradient(to right, #005ce6, #00bfff);
-        border: none;
-        color: white;
-        transition: background-color 0.3s ease;
+    .dl-horizontal dd {
+        margin-left: 180px;
     }
+
+    .dl-horizontal dt,
+    .dl-horizontal dd {
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .wide-table {
+        width: 100%;
+    }
+
+        .wide-table th, .wide-table td {
+            width: auto;
+        }
 
 </style>
 
@@ -237,41 +235,41 @@
     <div class="row">
         <div class="col-md-8">
             <img src="@Model.PictureUrl" alt="@Model.Name" class="img-fluid" style="max-width: 400px; border-radius: 10px; margin-bottom: 20px;" />
-            <dl class="row">
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.Name)
+            <dl class="dl-horizontal">
+                <dt>
+                    Назва готелю
                 </dt>
-                <dd class="col-sm-9">
+                <dd>
                     @Html.DisplayFor(model => model.Name)
                 </dd>
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.VacationHotel)
+                <dt>
+                    Готель для відпочинку
                 </dt>
-                <dd class="col-sm-9">
+                <dd>
                     @Html.DisplayFor(model => model.VacationHotel)
                 </dd>
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.Description)
+                <dt>
+                    Опис
                 </dt>
-                <dd class="col-sm-9">
+                <dd>
                     @Html.DisplayFor(model => model.Description)
                 </dd>
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.Contact)
+                <dt>
+                    Контактна інформація
                 </dt>
-                <dd class="col-sm-9">
+                <dd>
                     @Html.DisplayFor(model => model.Contact)
                 </dd>
-                <dt class="col-sm-3">
-                    @Html.DisplayNameFor(model => model.Rating)
+                <dt>
+                    Рейтинг
                 </dt>
-                <dd class="col-sm-9">
+                <dd>
                     @Html.DisplayFor(model => model.Rating) (Average)
                 </dd>
-                <dt class="col-sm-3">
-                    Address
+                <dt>
+                    Адреса
                 </dt>
-                <dd class="col-sm-9">
+                <dd>
                     @if (Model.Address != null)
                     {
                         <div>
@@ -286,12 +284,14 @@
             </dl>
 
             <h4>Hotel Rooms</h4>
-            <table class="hotel-table">
+            <table class="hotel-table wide-table">
                 <thead>
                     <tr>
-                        <th>Room number</th>
-                        <th>Price Per Night</th>
-                        <th>Is Available</th>
+                        <th>Номер кімнати</th>
+                        <th>Ціна за одну ніч</th>
+                        <th>Є в наявності ?</th>
+                        <th>Amenities</th>
+                        <th>Picture</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -301,7 +301,32 @@
                         <tr>
                             <td>@room.RoomNumber</td>
                             <td>@room.PricePerNight</td>
-                            <td>@room.IsAvailable</td>
+                            <td>@(room.IsAvailable ? "Так" : "Ні")</td>
+                            <td>
+                                @if (room.RoomAmenities != null && room.RoomAmenities.Any())
+                                {
+                                    <ul>
+                                        @foreach (var amenity in room.RoomAmenities)
+                                        {
+                                            <li>@amenity.Name</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <span>No amenities available</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(room.PictureUrl))
+                                {
+                                    <img src="@room.PictureUrl" alt="Room Picture" style="max-width: 100px; max-height: 100px;" />
+                                }
+                                else
+                                {
+                                    <span>No picture available</span>
+                                }
+                            </td>
                             <td>
                                 @if (room.IsAvailable)
                                 {
@@ -313,8 +338,7 @@
                                 }
                                 @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
                                 {
-                                    <a asp-action="EditRoom" asp-controller="Room" asp-route-id="@room.Id" class="btn btn-primary">Edit</a>
-
+                                    <a asp-action="Edit" asp-controller="Room" asp-route-id="@room.Id" class="btn btn-primary">Edit</a>
                                 }
                             </td>
                         </tr>
@@ -323,7 +347,7 @@
             </table>
 
             <h4>Reviews</h4>
-            <table class="hotel-table">
+            <table class="hotel-table wide-table">
                 <thead>
                     <tr>
                         <th>Comment</th>

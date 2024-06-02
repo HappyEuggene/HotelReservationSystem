@@ -65,6 +65,7 @@ namespace HotelReservationSystem.Controllers
         {
             var hotels = await _context.Hotels.Include(h => h.Rooms)
                                               .Include(h => h.Reviews)
+                                              .Include(h=>h.Address)
                                               .ToListAsync();
             return View(hotels);
         }
@@ -78,6 +79,7 @@ namespace HotelReservationSystem.Controllers
 
             var hotel = await _context.Hotels
                 .Include(h => h.Rooms)  
+                .ThenInclude(r=>r.RoomAmenities)
                 .Include(h => h.Reviews)
                 .Include(h => h.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);

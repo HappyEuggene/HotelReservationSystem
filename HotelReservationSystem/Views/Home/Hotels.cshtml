@@ -81,8 +81,8 @@
         font-size: 14px; /* Smaller font size */
         border-radius: 5px;
         transition: background-color 0.3s ease;
-        margin: 5px 0; /* Margin between buttons */
-        width: 80px; /* Fixed width for buttons */
+        margin: 5px; /* Margin between buttons */
+        width: 90px; /* Fixed width for buttons */
     }
 
     .btn-primary {
@@ -212,6 +212,15 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="MyReservations">Мої резервації</a>
                     </li>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
+                    {
+                        <li class="nav-item">
+                            <a asp-action="RoomAmenities" asp-controller="Admin" class="nav-link text-dark">Всі зручності для номеру</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="AllUsers" asp-controller="Admin" class="nav-link text-dark">Всі користувачі</a>
+                        </li>
+                    }
                 </ul>
                 <ul class="navbar-nav">
                     @if (User.Identity.IsAuthenticated)
@@ -252,23 +261,30 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var hotel in Model)
             {
                 <tr>
                     <td>
-                        <img src="@item.PictureUrl" alt="@item.Name" />
+                        <img src="@hotel.PictureUrl" alt="@hotel.Name" />
                     </td>
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Address.City)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Rating)</td>
+                    <td>@Html.DisplayFor(modelItem => hotel.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => hotel.Address.City)</td>
+                    @if (hotel.Rating == null)
+                    {
+                        <td><label>Поки що немає рейтингу</label></td>
+                    }
+                    else
+                    {
+                        <td>@Html.DisplayFor(modelItem => hotel.Rating)</td>
+                    }
                     <td>
                         <div class="btn-container-wrapper">
                             <div class="btn-container">
-                                <a class="btn btn-details" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                <a class="btn btn-details" asp-action="Details" asp-route-id="@hotel.Id">Детальніше</a>
                                 @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
                                 {
-                                    <a class="btn btn-edit" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a class="btn btn-edit" asp-action="Edit" asp-route-id="@hotel.Id">Редагувати</a>
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@hotel.Id">Видалити</a>
                                 }
                             </div>
                         </div>

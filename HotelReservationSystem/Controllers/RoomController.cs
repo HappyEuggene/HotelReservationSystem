@@ -1,7 +1,10 @@
-﻿using HotelReservationSystem.Contexts;
+﻿using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs;
+using HotelReservationSystem.Contexts;
 using HotelReservationSystem.Models;
 using HotelReservationSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelReservationSystem.Controllers
@@ -9,82 +12,115 @@ namespace HotelReservationSystem.Controllers
     public class RoomController : Controller
     {
         private readonly HotelDbContext _context;
+        private readonly BlobServiceClient _blobServiceClient;
 
-        public RoomController(HotelDbContext context)
+        public RoomController(HotelDbContext context, BlobServiceClient blobServiceClient)
         {
             _context = context;
+            _blobServiceClient = blobServiceClient;
         }
-        [HttpGet]
-        public IActionResult EditRoom(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            var room = _context.Rooms.Include(r => r.RoomAmenities).FirstOrDefault(r => r.Id == id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var room = await _context.Rooms
+                                     .Include(r => r.RoomAmenities)
+                                     .FirstOrDefaultAsync(r => r.Id == id);
+
             if (room == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new RoomViewModel
-            {
-                Id = room.Id,
-                RoomNumber = room.RoomNumber,
-                PricePerNight = room.PricePerNight,
-                IsAvailable = room.IsAvailable,
-                Rating = room.Rating,
-                RoomAmenities = room.RoomAmenities.Select(a => new RoomAmenityViewModel
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    Description = a.Description,
-                    AmenityId = a.AmenityId,
-                    HotelRoomId = a.HotelRoomId
-                }).ToList()
-            };
+            var amenities = await _context.RoomAmenities.ToListAsync();
+            ViewBag.Amenities = new MultiSelectList(amenities, "Id", "Name", room.RoomAmenities.Select(a => a.Id));
 
-            return View("Edit",viewModel);
+            return View(room);
         }
-
         [HttpPost]
-        public IActionResult EditRoom(RoomViewModel viewModel)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Room room, int[] selectedAmenities, IFormFile Image)
         {
+            if (id != room.Id)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                var room = _context.Rooms.Include(r => r.RoomAmenities).FirstOrDefault(r => r.Id == viewModel.Id);
-                if (room == null)
+                try
                 {
-                    return NotFound();
-                }
+                    var existingRoom = await _context.Rooms
+                                                     .Include(r => r.RoomAmenities)
+                                                     .FirstOrDefaultAsync(r => r.Id == id);
 
-                room.RoomNumber = viewModel.RoomNumber;
-                room.PricePerNight = viewModel.PricePerNight;
-                room.IsAvailable = viewModel.IsAvailable;
-                room.Rating = viewModel.Rating;
-
-                // Update room amenities
-                foreach (var amenity in viewModel.RoomAmenities)
-                {
-                    var existingAmenity = room.RoomAmenities.FirstOrDefault(a => a.Id == amenity.Id);
-                    if (existingAmenity != null)
+                    if (existingRoom == null)
                     {
-                        existingAmenity.Name = amenity.Name;
-                        existingAmenity.Description = amenity.Description;
+                        return NotFound();
+                    }
+
+                    existingRoom.PricePerNight = room.PricePerNight;
+                    existingRoom.IsAvailable = room.IsAvailable;
+                    existingRoom.Rating = room.Rating;
+                    existingRoom.RoomNumber = room.RoomNumber;
+                    existingRoom.HotelId = room.HotelId;
+
+                    // Add new room amenities without clearing the existing ones
+                    var currentAmenityIds = existingRoom.RoomAmenities.Select(a => a.Id).ToList();
+                    foreach (var amenityId in selectedAmenities)
+                    {
+                        if (!currentAmenityIds.Contains(amenityId))
+                        {
+                            var amenity = await _context.RoomAmenities.FindAsync(amenityId);
+                            if (amenity != null)
+                            {
+                                existingRoom.RoomAmenities.Add(amenity);
+                            }
+                        }
+                    }
+
+                    if (Image != null)
+                    {
+                        var containerClient = _blobServiceClient.GetBlobContainerClient("forhotelrooms");
+
+                        var blobClient = containerClient.GetBlobClient(Image.FileName);
+
+                        await using (var stream = Image.OpenReadStream())
+                        {
+                            await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = "image/jpeg" });
+                        }
+
+                        existingRoom.PictureUrl = blobClient.Uri.ToString();
+                    }
+
+                    _context.Update(existingRoom);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!RoomExists(room.Id))
+                    {
+                        return NotFound();
                     }
                     else
                     {
-                        room.RoomAmenities.Add(new RoomAmenity
-                        {
-                            Name = amenity.Name,
-                            Description = amenity.Description,
-                            AmenityId = amenity.AmenityId,
-                            HotelRoomId = room.Id
-                        });
+                        throw;
                     }
                 }
-
-                _context.SaveChanges();
-                return RedirectToAction("Details", new { id = viewModel.Id });
+                return RedirectToAction("Hotels", "Home");
             }
 
-            return View(viewModel);
+            var amenities = await _context.RoomAmenities.ToListAsync();
+            ViewBag.Amenities = new MultiSelectList(amenities, "Id", "Name", selectedAmenities);
+            return View(room);
+        }
+
+        private bool RoomExists(int id)
+        {
+            return _context.Rooms.Any(e => e.Id == id);
         }
     }
 }

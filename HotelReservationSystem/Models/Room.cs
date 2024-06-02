@@ -9,6 +9,7 @@ public class Room
     public int RoomNumber {  get; set; }
     public int? HotelId { get; set; }
     public Hotel? Hotel { get; set; }
+    public string? PictureUrl {  get; set; }
     public ICollection<RoomAmenity>? RoomAmenities { get; set; } = new List<RoomAmenity>();
 }
 

@@ -1,42 +1,41 @@
-﻿@model HotelReservationSystem.ViewModels.RoomViewModel
+﻿@model Room
 
 @{
     ViewData["Title"] = "Edit Room";
 }
 
-<div class="hotel-container">
-    <h1 class="hotel-title">Edit Room @Model.RoomNumber</h1>
-    <form asp-action="EditRoom" method="post">
-        <div class="form-group">
-            <label asp-for="RoomNumber" class="control-label"></label>
-            <input asp-for="RoomNumber" class="form-control" />
-            <span asp-validation-for="RoomNumber" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="PricePerNight" class="control-label"></label>
-            <input asp-for="PricePerNight" class="form-control" />
-            <span asp-validation-for="PricePerNight" class="text-danger"></span>
-        </div>
+<h1>Edit Room</h1>
 
-        <h2>Amenities</h2>
-        <div id="amenities-container">
-            @for (int i = 0; i < Model.RoomAmenities.Count; i++)
-            {
-                <div class="form-group">
-                    <label asp-for="RoomAmenities[i].Name" class="control-label">Name</label>
-                    <input asp-for="RoomAmenities[i].Name" class="form-control" />
-                    <span asp-validation-for="RoomAmenities[i].Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="RoomAmenities[i].Description" class="control-label">Description</label>
-                    <input asp-for="RoomAmenities[i].Description" class="form-control" />
-                    <span asp-validation-for="RoomAmenities[i].Description" class="text-danger"></span>
-                </div>
-            }
-        </div>
+<h4>Room</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <input type="hidden" asp-for="HotelId" />
+            <input type="hidden" asp-for="RoomNumber" />
+            <input type="hidden" asp-for="IsAvailable" />
+            <input type="hidden" asp-for="Rating" />
+            <div class="form-group">
+                <label asp-for="PricePerNight" class="control-label"></label>
+                <input asp-for="PricePerNight" class="form-control" />
+                <span asp-validation-for="PricePerNight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="selectedAmenities" class="control-label">Amenities</label>
+                <select asp-for="RoomAmenities" asp-items="ViewBag.Amenities" multiple class="form-control" id="selectedAmenities" name="selectedAmenities"></select>
+            </div>
+            <div class="form-group">
+                <label for="Image" class="control-label">Room Image</label>
+                <input type="file" class="form-control" id="Image" name="Image" />
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
 
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-    </form>
+<div>
+    <a asp-action="Index">Back to List</a>
 </div>

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<RoomAmenity>
+
+@{
+    ViewData["Title"] = "Room Amenities";
+}
+
+<h1>Room Amenities</h1>
+
+<p>
+    <a asp-action="AddRoomAmenity" class="btn btn-primary">Add Room Amenity</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Room Number</th>
+            <th>Hotel Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var amenity in Model)
+        {
+            <tr>
+                <td>@amenity.Name</td>
+                <td>@amenity.Description</td>
+                @if (amenity.HotelRooms != null && amenity.HotelRooms.Any())
+                {
+                    <td>
+                        @foreach (var room in amenity.HotelRooms)
+                        {
+                            <div>@room.RoomNumber</div>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var room in amenity.HotelRooms)
+                        {
+                            <div>@room.Hotel?.Name</div>
+                        }
+                    </td>
+                }
+                else
+                {
+                    <td><label>Жоден номер не має такої зручності</label></td>
+                    <td><label>Жоден номер не має такої зручності</label></td>
+                }
+            </tr>
+        }
+
+    </tbody>
+</table>
