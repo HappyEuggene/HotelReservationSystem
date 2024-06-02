@@ -6,87 +6,117 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace HotelReservationSystem.Controllers;
-public class ReservationController : Controller
+namespace HotelReservationSystem.Controllers
 {
-    private readonly HotelDbContext _context;
-    private readonly UserManager<User> _userManager;
-
-    public ReservationController(HotelDbContext context, UserManager<User> userManager)
+    public class ReservationController : Controller
     {
-        _context = context;
-        _userManager = userManager;
-    }
+        private readonly HotelDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-    [HttpGet]
-    [Authorize]
-    public IActionResult Create(int hotelId, int roomId)
-    {
-        var model = new ReservationViewModel
+        public ReservationController(HotelDbContext context, UserManager<User> userManager)
         {
-            HotelId = hotelId,
-            RoomId = roomId
-        };
-        return View(model);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(ReservationViewModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            var room = await _context.Rooms.FindAsync(model.RoomId);
-            if (room == null || !room.IsAvailable)
-            {
-                ModelState.AddModelError(string.Empty, "Room is not available.");
-                return View(model);
-            }
-
-            var days = (model.EndDate - model.StartDate).Days;
-            var totalPrice = days * room.PricePerNight;
-
-            var reservation = new Reservation
-            {
-                UserId = user.Id,
-                RoomId = model.RoomId,
-                StartDate = model.StartDate,
-                EndDate = model.EndDate,
-                TotalPrice = totalPrice,
-                Status = "Pending"
-            };
-
-            _context.Reservations.Add(reservation);
-            await _context.SaveChangesAsync();
-
-            var hotelReservation = new HotelReservation
-            {
-                HotelId = model.HotelId,
-                ReservationId = reservation.Id
-            };
-
-            _context.HotelReservations.Add(hotelReservation);
-            room.IsAvailable = false;
-            _context.Rooms.Update(room);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            _context = context;
+            _userManager = userManager;
         }
 
-        return View(model);
-    }
-    [Authorize]
-    public async Task<IActionResult> MyReservations()
-    {
-        var user = await _userManager.GetUserAsync(User);
-        var reservations = await _context.Reservations
-            .Include(r => r.HotelReservations)
-                .ThenInclude(hr => hr.Hotel)
-            .Include(r => r.Room)
-            .Where(r => r.UserId == user.Id)
-            .ToListAsync();
+        [HttpGet]
+        [Authorize]
+        public IActionResult Create(int hotelId, int roomId)
+        {
+            var model = new ReservationViewModel
+            {
+                HotelId = hotelId,
+                RoomId = roomId
+            };
+            return View(model);
+        }
 
-        return View(reservations);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ReservationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                var room = await _context.Rooms.FindAsync(model.RoomId);
+                if (room == null || !room.IsAvailable)
+                {
+                    ModelState.AddModelError(string.Empty, "Room is not available.");
+                    return View(model);
+                }
+
+                var days = (model.EndDate - model.StartDate).Days;
+                var totalPrice = days * room.PricePerNight;
+
+                var reservation = new Reservation
+                {
+                    UserId = user.Id,
+                    RoomId = model.RoomId,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
+                    TotalPrice = totalPrice,
+                    Status = "Pending"
+                };
+
+                _context.Reservations.Add(reservation);
+                await _context.SaveChangesAsync();
+
+                var hotelReservation = new HotelReservation
+                {
+                    HotelId = model.HotelId,
+                    ReservationId = reservation.Id
+                };
+
+                _context.HotelReservations.Add(hotelReservation);
+                room.IsAvailable = false;
+                _context.Rooms.Update(room);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MyReservations()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var reservations = await _context.Reservations
+                .Include(r => r.HotelReservations)
+                    .ThenInclude(hr => hr.Hotel)
+                .Include(r => r.Room)
+                .Where(r => r.UserId == user.Id)
+                .ToListAsync();
+
+            return View(reservations);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var reservation = await _context.Reservations
+                .Include(r => r.Room)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            var room = reservation.Room;
+            if (room != null)
+            {
+                room.IsAvailable = true;
+                _context.Rooms.Update(room);
+            }
+
+            _context.Reservations.Remove(reservation);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(MyReservations));
+        }
     }
 }

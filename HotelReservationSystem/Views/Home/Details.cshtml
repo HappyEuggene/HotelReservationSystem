@@ -49,7 +49,7 @@
         }
 
         .hotel-table img {
-            max-width: 220px;
+            max-width: 400px;
             height: auto;
             border-radius: 5px;
         }
@@ -319,15 +319,15 @@
                 </dd>
             </dl>
 
-            <h4>Hotel Rooms</h4>
+            <h4>Кімнати Готелю</h4>
             <table class="hotel-table wide-table">
                 <thead>
                     <tr>
-                        <th>Номер кімнати</th>
-                        <th>Ціна за одну ніч</th>
-                        <th>Є в наявності ?</th>
-                        <th>Зручності</th>
                         <th>Фото кімнати</th>
+                        <th>Зручності</th>
+                        <th>Номер кімнати</th>
+                        <th>Є в наявності ?</th>
+                        <th>Ціна за одну ніч</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -335,9 +335,16 @@
                     @foreach (var room in Model.Rooms)
                     {
                         <tr>
-                            <td>@room.RoomNumber</td>
-                            <td>@room.PricePerNight</td>
-                            <td>@(room.IsAvailable ? "Так" : "Ні")</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(room.PictureUrl))
+                                {
+                                    <img src="@room.PictureUrl" alt="Room Picture" style="max-width: 200px; max-height: 200px;" />
+                                }
+                                else
+                                {
+                                    <span>Зображення відсутнє</span>
+                                }
+                            </td>
                             <td>
                                 @if (room.RoomAmenities != null && room.RoomAmenities.Any())
                                 {
@@ -350,19 +357,12 @@
                                 }
                                 else
                                 {
-                                    <span>No amenities available</span>
+                                    <span>Зручності відсутні</span>
                                 }
                             </td>
-                            <td>
-                                @if (!string.IsNullOrEmpty(room.PictureUrl))
-                                {
-                                    <img src="@room.PictureUrl" alt="Room Picture" style="max-width: 100px; max-height: 100px;" />
-                                }
-                                else
-                                {
-                                    <span>No picture available</span>
-                                }
-                            </td>
+                            <td>@room.RoomNumber</td>
+                            <td>@(room.IsAvailable ? "Так" : "Ні")</td>
+                            <td>@room.PricePerNight</td>
                             <td class="btn-right">
                                 @if (room.IsAvailable)
                                 {
@@ -370,7 +370,7 @@
                                 }
                                 else
                                 {
-                                    <span class="text-danger">Not Available</span>
+                                    <span class="text-danger">Недоступно</span>
                                 }
                                 @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
                                 {
@@ -382,13 +382,13 @@
                 </tbody>
             </table>
 
-            <h4>Reviews</h4>
+            <h4>Відгуки</h4>
             <table class="hotel-table wide-table">
                 <thead>
                     <tr>
-                        <th>Comment</th>
-                        <th>Rating</th>
-                        <th>Date</th>
+                        <th>Коментар</th>
+                        <th>Рейтинг</th>
+                        <th>Дата</th>
                     </tr>
                 </thead>
                 <tbody>

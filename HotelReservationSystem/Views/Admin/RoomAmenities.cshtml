@@ -135,6 +135,7 @@
                     <th>Опис</th>
                     <th>Номер кімнати</th>
                     <th>Назва готелю</th>
+                    <th>Дії</th>
                 </tr>
             </thead>
             <tbody>
@@ -162,6 +163,12 @@
                         {
                             <td colspan="2"><label>Жоден номер не має такої зручності</label></td>
                         }
+                        <td>
+                            <form asp-action="DeleteRoomAmenity" asp-controller="Admin" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@amenity.Id" />
+                                <button type="submit" class="btn btn-danger">Видалити</button>
+                            </form>
+                        </td>
                     </tr>
                 }
             </tbody>

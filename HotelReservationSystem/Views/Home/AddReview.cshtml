@@ -2,30 +2,114 @@
 @model ReviewViewModel
 
 @{
-    ViewData["Title"] = "Add Review";
+    ViewData["Title"] = "Додати Відгук";
 }
 
-<h2>Add Review</h2>
+<style>
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-<form asp-action="AddReview">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    .content {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-    <input type="hidden" asp-for="HotelId" />
+    .review-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-    <div class="form-group">
-        <label asp-for="Rating" class="control-label"></label>
-        <input asp-for="Rating" class="form-control" type="number" min="1" max="5" />
-        <span asp-validation-for="Rating" class="text-danger"></span>
+    .review-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .form-group label {
+        font-weight: 600;
+    }
+
+    .btn-submit {
+        background: linear-gradient(to right, #007bff, #0056b3);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-submit:hover {
+            opacity: 0.8;
+        }
+
+    .btn-back {
+        background: linear-gradient(to right, #778899, #696969);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+
+        .btn-back:hover {
+            opacity: 0.8;
+        }
+
+    .back-button-container {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .submit-button-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="content">
+    <div class="review-container">
+        <h2 class="review-title">Додати Відгук</h2>
+
+        <form asp-action="AddReview">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <input type="hidden" asp-for="HotelId" />
+
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label">Оцінка 0-5</label>
+                <input asp-for="Rating" class="form-control" type="number" min="1" max="5" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label">Коментар</label>
+                <textarea asp-for="Comment" class="form-control"></textarea>
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            <div class="submit-button-container">
+                <input type="submit" value="Додати Відгук" class="btn btn-submit" />
+            </div>
+        </form>
+
+        <div class="back-button-container">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-back">Назад</a>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Comment" class="control-label"></label>
-        <textarea asp-for="Comment" class="form-control"></textarea>
-        <span asp-validation-for="Comment" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Add Review" class="btn btn-primary" />
-    </div>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

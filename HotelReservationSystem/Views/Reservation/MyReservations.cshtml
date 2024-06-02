@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Reservation>
 
 @{
-    ViewData["Title"] = "My Reservations";
+    ViewData["Title"] = "Мої Резервації";
 }
 
 <style>
@@ -82,6 +82,20 @@
         display: inline-block;
     }
 
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-danger:hover {
+            opacity: 0.8;
+        }
+
     .back-button-container {
         text-align: left;
         margin-top: 20px;
@@ -102,6 +116,7 @@
                     <th>Дата завершення</th>
                     <th>Загальна ціна</th>
                     <th>Статус</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -116,6 +131,12 @@
                             <td>@reservation.EndDate.ToShortDateString()</td>
                             <td>@reservation.TotalPrice.ToString("C")</td>
                             <td>@reservation.Status</td>
+                            <td>
+                                <form asp-action="Delete" method="post">
+                                    <input type="hidden" name="id" value="@reservation.Id" />
+                                    <button type="submit" class="btn btn-danger">Видалити</button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 }

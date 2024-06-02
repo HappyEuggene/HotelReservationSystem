@@ -48,6 +48,7 @@ namespace HotelReservationSystem.Controllers
             {
                 return NotFound();
             }
+            ModelState.Remove("Image");
 
             if (ModelState.IsValid)
             {
@@ -84,7 +85,7 @@ namespace HotelReservationSystem.Controllers
 
                     if (Image != null)
                     {
-                        var containerClient = _blobServiceClient.GetBlobContainerClient("forhotelrooms");
+                        var containerClient = _blobServiceClient.GetBlobContainerClient("eugenehotel");
 
                         var blobClient = containerClient.GetBlobClient(Image.FileName);
 

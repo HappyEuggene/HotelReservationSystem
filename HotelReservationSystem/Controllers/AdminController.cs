@@ -59,7 +59,7 @@ namespace HotelReservationSystem.Controllers
                 _context.SaveChanges();
             }
 
-            return RedirectToAction(nameof(AddRoomAmenity));
+            return RedirectToAction(nameof(RoomAmenities));
         }
 
         public async Task<IActionResult> AllUsers()
