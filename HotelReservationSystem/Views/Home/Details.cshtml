@@ -101,11 +101,34 @@
         color: white;
     }
 
+    .btn-reserve {
+        background: linear-gradient(to right, #28a745, #218838);
+        border: none;
+        color: white;
+    }
+
+    .btn-back-to-list {
+        background: linear-gradient(to right, #778899, #696969);
+        border: none;
+        color: white;
+        margin-top: 20px; /* Add margin to the top */
+    }
+
+    .btn-review {
+        background: linear-gradient(to right, #FFA500, #FF8C00);
+        border: none;
+        color: black;
+        margin-top: 20px; /* Add margin to the top */
+    }
+
         .btn-primary:hover,
         .btn-info:hover,
         .btn-danger:hover,
         .btn-details:hover,
-        .btn-edit:hover {
+        .btn-edit:hover,
+        .btn-reserve:hover,
+        .btn-back-to-list:hover,
+        .btn-review:hover {
             opacity: 0.8;
         }
 
@@ -168,16 +191,17 @@
     .dl-horizontal dt {
         float: left;
         clear: left;
-        width: 160px;
+        width: 200px;
         overflow: hidden;
         text-align: right;
         text-overflow: ellipsis;
         white-space: nowrap;
         padding-right: 10px;
+        text-align: left;
     }
 
     .dl-horizontal dd {
-        margin-left: 180px;
+        margin-left: 250px;
     }
 
     .dl-horizontal dt,
@@ -190,9 +214,21 @@
         width: 100%;
     }
 
-        .wide-table th, .wide-table td {
+        .wide-table th,
+        .wide-table td {
             width: auto;
         }
+
+    .btn-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
 
 </style>
 
@@ -233,7 +269,7 @@
     <h1 class="hotel-title">Готель: @Model.Name</h1>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <img src="@Model.PictureUrl" alt="@Model.Name" class="img-fluid" style="max-width: 400px; border-radius: 10px; margin-bottom: 20px;" />
             <dl class="dl-horizontal">
                 <dt>
@@ -290,9 +326,9 @@
                         <th>Номер кімнати</th>
                         <th>Ціна за одну ніч</th>
                         <th>Є в наявності ?</th>
-                        <th>Amenities</th>
-                        <th>Picture</th>
-                        <th>Action</th>
+                        <th>Зручності</th>
+                        <th>Фото кімнати</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -327,10 +363,10 @@
                                     <span>No picture available</span>
                                 }
                             </td>
-                            <td>
+                            <td class="btn-right">
                                 @if (room.IsAvailable)
                                 {
-                                    <a asp-action="Create" asp-controller="Reservation" asp-route-hotelId="@Model.Id" asp-route-roomId="@room.Id" class="btn btn-primary">Reserve</a>
+                                    <a asp-action="Create" asp-controller="Reservation" asp-route-hotelId="@Model.Id" asp-route-roomId="@room.Id" class="btn btn-reserve">Зарезервувати</a>
                                 }
                                 else
                                 {
@@ -338,7 +374,7 @@
                                 }
                                 @if (User.IsInRole("Administrator") || User.IsInRole("HotelManager"))
                                 {
-                                    <a asp-action="Edit" asp-controller="Room" asp-route-id="@room.Id" class="btn btn-primary">Edit</a>
+                                    <a asp-action="Edit" asp-controller="Room" asp-route-id="@room.Id" class="btn btn-primary">Редагувати</a>
                                 }
                             </td>
                         </tr>
@@ -369,9 +405,9 @@
         </div>
     </div>
 
-    <div>
-        <a asp-action="Index" class="btn btn-primary">Back to List</a>
-        <a asp-action="AddReview" asp-route-hotelId="@Model.Id" class="btn btn-primary">Add Review</a>
+    <div class="btn-container">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-back-to-list">Назад</a>
+        <a asp-action="AddReview" asp-route-hotelId="@Model.Id" class="btn btn-review">Залишити відгук</a>
     </div>
 </div>
 

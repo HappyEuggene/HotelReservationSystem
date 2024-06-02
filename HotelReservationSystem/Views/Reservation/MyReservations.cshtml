@@ -4,37 +4,130 @@
     ViewData["Title"] = "My Reservations";
 }
 
-<h2>My Reservations</h2>
+<style>
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Hotel Name</th>
-            <th>Room number</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Total Price</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var reservation in Model)
-        {
-            @foreach (var hotelReservation in reservation.HotelReservations)
-            {
-                <tr>
-                    <td>@hotelReservation.Hotel.Name</td>
-                    <td>@reservation.Room.RoomNumber</td>
-                    <td>@reservation.StartDate.ToShortDateString()</td>
-                    <td>@reservation.EndDate.ToShortDateString()</td>
-                    <td>@reservation.TotalPrice.ToString("C")</td>
-                    <td>@reservation.Status</td>
-                </tr>
-            }
+    .content {
+        flex: 1;
+    }
+
+    .reservation-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        max-width: 1200px;
+        margin: 30px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .reservation-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .reservation-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        background-color: #FFFAFA;
+    }
+
+        .reservation-table th,
+        .reservation-table td {
+            padding: 15px;
+            text-align: left;
         }
-    </tbody>
-</table>
 
-<div>
-    <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Back to Home</a>
+        .reservation-table th {
+            background-color: #e6e6e6;
+            font-size: 1.05rem;
+        }
+
+        .reservation-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .reservation-table tr {
+            border-bottom: 1px solid #ccc;
+        }
+
+    .btn-primary,
+    .btn-back {
+        background: linear-gradient(to right, #007bff, #0056b3);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+
+        .btn-primary:hover,
+        .btn-back:hover {
+            opacity: 0.8;
+        }
+
+    .btn-back {
+        background-color: #6c757d;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+    .back-button-container {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+</style>
+
+<div class="content">
+    <div class="reservation-container">
+        <h2 class="reservation-title">Мої Резервації</h2>
+
+        <table class="reservation-table">
+            <thead>
+                <tr>
+                    <th>Назва готелю</th>
+                    <th>Номер кімнати</th>
+                    <th>Дата початку</th>
+                    <th>Дата завершення</th>
+                    <th>Загальна ціна</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reservation in Model)
+                {
+                    @foreach (var hotelReservation in reservation.HotelReservations)
+                    {
+                        <tr>
+                            <td>@hotelReservation.Hotel.Name</td>
+                            <td>@reservation.Room.RoomNumber</td>
+                            <td>@reservation.StartDate.ToShortDateString()</td>
+                            <td>@reservation.EndDate.ToShortDateString()</td>
+                            <td>@reservation.TotalPrice.ToString("C")</td>
+                            <td>@reservation.Status</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <div class="back-button-container">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-back">Назад до Головної</a>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

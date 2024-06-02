@@ -4,38 +4,99 @@
     ViewData["Title"] = "Edit Room";
 }
 
-<h1>Edit Room</h1>
+<style>
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
 
-<h4>Room</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <input type="hidden" asp-for="HotelId" />
-            <input type="hidden" asp-for="RoomNumber" />
-            <input type="hidden" asp-for="IsAvailable" />
-            <input type="hidden" asp-for="Rating" />
-            <div class="form-group">
-                <label asp-for="PricePerNight" class="control-label"></label>
-                <input asp-for="PricePerNight" class="form-control" />
-                <span asp-validation-for="PricePerNight" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="selectedAmenities" class="control-label">Amenities</label>
-                <select asp-for="RoomAmenities" asp-items="ViewBag.Amenities" multiple class="form-control" id="selectedAmenities" name="selectedAmenities"></select>
-            </div>
-            <div class="form-group">
-                <label for="Image" class="control-label">Room Image</label>
-                <input type="file" class="form-control" id="Image" name="Image" />
-            </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    .room-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        text-align: left;
+        max-width: 600px;
+        margin: 30px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .room-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 1.2rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #007bff, #0056b3);
+        border: none;
+        color: white;
+        padding: 9px 16px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+
+        .btn-primary:hover {
+            opacity: 0.8;
+        }
+
+    .btn-back {
+        background: linear-gradient(to right, #778899, #696969);
+        border: none;
+        color: white;
+        padding: 8px 15px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+        .btn-back:hover {
+            opacity: 0.8;
+        }
+
+    .back-button-container {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+</style>
+
+<div class="room-container">
+    <h1 class="room-title">Редагувати Кімнату</h1>
+
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="HotelId" />
+        <input type="hidden" asp-for="RoomNumber" />
+        <input type="hidden" asp-for="IsAvailable" />
+        <input type="hidden" asp-for="Rating" />
+        <div class="form-group">
+            <label asp-for="PricePerNight" class="control-label">Ціна за ніч</label>
+            <input asp-for="PricePerNight" class="form-control" />
+            <span asp-validation-for="PricePerNight" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="selectedAmenities" class="control-label">Зручності</label>
+            <select asp-for="RoomAmenities" asp-items="ViewBag.Amenities" multiple class="form-control" id="selectedAmenities" name="selectedAmenities"></select>
+        </div>
+        <div class="form-group">
+            <label for="Image" class="control-label">Фото кімнати</label>
+            <input type="file" class="form-control" id="Image" name="Image" />
+        </div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <input type="submit" value="Зберегти" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <div class="back-button-container">
+        <a asp-action="Details" asp-controller="Home" asp-route-id="@Model.HotelId" class="btn btn-back">Назад</a>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>

@@ -4,25 +4,87 @@
     ViewData["Title"] = "Add Room Amenity";
 }
 
-<h1>Add Room Amenity</h1>
+<style>
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
 
-<form asp-action="AddRoomAmenity" method="post">
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-  
-    <div class="form-group">
-        <input type="submit" value="Add" class="btn btn-primary" />
-    </div>
-</form>
+    .amenity-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        text-align: left;
+        max-width: 600px;
+        margin: 30px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    .amenity-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 1.2rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #008000, #006400);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+
+        .btn-primary:hover {
+            opacity: 0.8;
+        }
+
+    .btn-back-to-list {
+        background: linear-gradient(to right, #778899, #696969 );
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+        .btn-back-to-list:hover {
+            opacity: 0.8;
+        }
+
+</style>
+
+<div class="amenity-container">
+    <h1 class="amenity-title">Додати Зручність</h1>
+
+    <form asp-action="AddRoomAmenity" method="post">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label">Назва</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label">Опис</label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Додати" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="RoomAmenities" class="btn btn-back-to-list">Назад до списку</a>
+    </div>
 </div>

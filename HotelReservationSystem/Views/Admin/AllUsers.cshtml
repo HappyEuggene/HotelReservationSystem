@@ -5,40 +5,169 @@
     ViewData["Title"] = "Users with Roles";
 }
 
-<h1>Users with Roles</h1>
+<style>
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>UserName</th>
-            <th>Roles</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.UserName</td>
-                <td>
-                    @foreach (var role in user.Roles)
-                    {
-                        <span style="color:black" class="badge badge-primary">@role</span>
-                    }
-                </td>
-                <td>
-                    @{
-                        bool isAdminOrManager = user.Roles.Contains("Administrator") || user.Roles.Contains("HotelManager");
-                    }
-                    @if (!isAdminOrManager)
-                    {
-                        <form asp-action="ChangeRoleToHotelManager" method="post" style="display:inline;">
-                            <input type="hidden" name="userId" value="@user.UserId" />
-                            <button type="submit" class="btn btn-warning">Make Hotel Manager</button>
-                        </form>
-                    }
-                </td>
-            </tr>
+    .content {
+        flex: 1;
+    }
+
+    .users-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        max-width: 1200px;
+        margin: 30px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .users-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .users-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        background-color: #FFFAFA;
+    }
+
+        .users-table th,
+        .users-table td {
+            padding: 15px;
+            text-align: left;
         }
-    </tbody>
-</table>
+
+        .users-table th {
+            background-color: #e6e6e6;
+            font-size: 1.05rem;
+        }
+
+        .users-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .users-table tr {
+            border-bottom: 1px solid #ccc;
+        }
+
+    .badge-primary {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        color: black;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+    .btn-back-to-list {
+        background: linear-gradient(to right, #778899, #696969 );
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+        .btn-back-to-list:hover {
+            opacity: 0.8;
+        }
+
+    footer.footer-nav {
+        background-color: #343a40;
+        padding: 20px 0;
+        position: relative;
+        width: 100%;
+        bottom: 0;
+    }
+
+    .footer-nav .nav-link {
+        color: #fff !important;
+        font-size: 1.1rem;
+        padding: 0 15px;
+    }
+
+        .footer-nav .nav-link:hover {
+            color: #007bff !important;
+            text-decoration: underline;
+        }
+
+    .footer-divider {
+        color: #fff;
+        margin: 0 10px;
+    }
+</style>
+
+<div class="content">
+    <div class="users-container">
+        <h1 class="users-title">Користувачі з ролями</h1>
+
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Ім'я користувача</th>
+                    <th>Ролі</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td>
+                            @foreach (var role in user.Roles)
+                            {
+                                <span class="badge badge-primary">@role</span>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                bool isAdminOrManager = user.Roles.Contains("Administrator") || user.Roles.Contains("HotelManager");
+                            }
+                            @if (!isAdminOrManager)
+                            {
+                                <form asp-action="ChangeRoleToHotelManager" method="post" style="display:inline;">
+                                    <input type="hidden" name="userId" value="@user.UserId" />
+                                    <button type="submit" class="btn btn-warning">Призначити Менеджером Готелю</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <a asp-controller="Home" asp-action="Index" class="btn btn-back-to-list">Назад</a>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

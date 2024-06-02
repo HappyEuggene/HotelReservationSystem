@@ -4,49 +4,175 @@
     ViewData["Title"] = "Room Amenities";
 }
 
-<h1>Room Amenities</h1>
+<style>
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8)), url('/images/lake-6712968_1920.jpg') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-<p>
-    <a asp-action="AddRoomAmenity" class="btn btn-primary">Add Room Amenity</a>
-</p>
+    .content {
+        flex: 1;
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Room Number</th>
-            <th>Hotel Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var amenity in Model)
-        {
-            <tr>
-                <td>@amenity.Name</td>
-                <td>@amenity.Description</td>
-                @if (amenity.HotelRooms != null && amenity.HotelRooms.Any())
-                {
-                    <td>
-                        @foreach (var room in amenity.HotelRooms)
-                        {
-                            <div>@room.RoomNumber</div>
-                        }
-                    </td>
-                    <td>
-                        @foreach (var room in amenity.HotelRooms)
-                        {
-                            <div>@room.Hotel?.Name</div>
-                        }
-                    </td>
-                }
-                else
-                {
-                    <td><label>Жоден номер не має такої зручності</label></td>
-                    <td><label>Жоден номер не має такої зручності</label></td>
-                }
-            </tr>
+    .amenity-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        max-width: 1200px;
+        margin: 30px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .amenity-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .btn-add {
+        background: linear-gradient(to right, #008000, #006400);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin: 20px 0;
+    }
+
+        .btn-add:hover {
+            opacity: 0.8;
         }
 
-    </tbody>
-</table>
+    .btn-back {
+        background: linear-gradient(to right, #778899, #696969 );
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+    }
+
+        .btn-back:hover {
+            opacity: 0.8;
+        }
+
+    .amenity-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        background-color: #FFFAFA;
+    }
+
+        .amenity-table th,
+        .amenity-table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .amenity-table th {
+            background-color: #e6e6e6;
+            font-size: 1.05rem;
+        }
+
+        .amenity-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .amenity-table tr {
+            border-bottom: 1px solid #ccc;
+        }
+
+    .footer-nav {
+        background-color: #343a40;
+        padding: 20px 0;
+        position: relative;
+        width: 100%;
+        bottom: 0;
+    }
+
+        .footer-nav .nav-link {
+            color: #fff !important;
+            font-size: 1.1rem;
+            padding: 0 15px;
+        }
+
+            .footer-nav .nav-link:hover {
+                color: #007bff !important;
+                text-decoration: underline;
+            }
+
+    .footer-divider {
+        color: #fff;
+        margin: 0 10px;
+    }
+
+    .back-button-container {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+</style>
+
+<div class="content">
+    <div class="amenity-container">
+        <h1 class="amenity-title">Зручності номерів</h1>
+
+        <p>
+            <a asp-action="AddRoomAmenity" class="btn btn-add">Додати Зручність</a>
+        </p>
+
+        <table class="amenity-table">
+            <thead>
+                <tr>
+                    <th>Назва</th>
+                    <th>Опис</th>
+                    <th>Номер кімнати</th>
+                    <th>Назва готелю</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var amenity in Model)
+                {
+                    <tr>
+                        <td>@amenity.Name</td>
+                        <td>@amenity.Description</td>
+                        @if (amenity.HotelRooms != null && amenity.HotelRooms.Any())
+                        {
+                            <td>
+                                @foreach (var room in amenity.HotelRooms)
+                                {
+                                    <div>@room.RoomNumber</div>
+                                }
+                            </td>
+                            <td>
+                                @foreach (var room in amenity.HotelRooms)
+                                {
+                                    <div>@room.Hotel?.Name</div>
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td colspan="2"><label>Жоден номер не має такої зручності</label></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="back-button-container">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-back">Назад</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

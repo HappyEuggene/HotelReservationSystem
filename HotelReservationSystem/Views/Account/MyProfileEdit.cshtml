@@ -5,72 +5,273 @@
     ViewData["Title"] = "Edit Profile";
 }
 
-<h2>Редагування профілю</h2>
+<style>
+    .profile-page {
+        display: flex;
+        max-width: 1200px;
+        margin: 50px auto;
+        background-color: #e8e8e8;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
 
-<div class="row">
-    <div class="col-md-6">
+    .sidebar {
+        width: 250px;
+        background-color: #a0acb8;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-right: 30px;
+    }
+
+        .sidebar .nav-link {
+            color: #333;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            text-decoration: none;
+        }
+
+            .sidebar .nav-link:hover {
+                text-decoration: underline;
+            }
+
+            .sidebar .nav-link img {
+                margin-right: 10px;
+            }
+
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
+
+        .content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        .content .form-group label {
+            font-weight: 600;
+        }
+
+    .btn-primary {
+        background: linear-gradient(to right, #005ce6, #00bfff);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-back {
+        background-color: #6c757d;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+        .btn-back:hover {
+            opacity: 0.8;
+        }
+
+    .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #a0acb8;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+        .top-nav .nav-item {
+            margin-right: 10px;
+        }
+
+        .top-nav .nav-link {
+            background-color: #FFFAFA;
+            border-radius: 10px;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+            .top-nav .nav-link:hover {
+                background-color: #e0e0e0;
+            }
+
+    .footer-nav {
+        background-color: #343a40;
+        padding: 20px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+        .footer-nav .nav-link {
+            color: #fff !important;
+            font-size: 1.1rem;
+            padding: 0 15px;
+        }
+
+            .footer-nav .nav-link:hover {
+                color: #007bff !important;
+                text-decoration: underline;
+            }
+
+    .footer-divider {
+        color: #fff;
+        margin: 0 10px;
+    }
+</style>
+
+<div class="top-nav">
+    <ul class="navbar-nav d-flex flex-row">
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Головна сторінка</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Hotels">Дивитись усі готелі</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Reservation" asp-action="MyReservations">Мої резервації</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav d-flex flex-row">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="MyProfile">Мій профіль</a>
+            </li>
+            <li class="nav-item">
+                <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
+                    <button type="submit" class="nav-link btn btn-link" style="border: none;">Вийти</button>
+                </form>
+            </li>
+        }
+    </ul>
+</div>
+
+<div class="profile-page">
+    <div class="sidebar">
+        <h4>Меню</h4>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Account" asp-action="MyProfile">Персональні дані</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Security" asp-action="Index">Безпека</a>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>Редагування профілю</h2>
+
         <form asp-action="MyProfile" method="post" id="profileForm">
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">Електронна пошта</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
+                <label asp-for="FirstName" class="control-label">Ім'я</label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
+                <label asp-for="LastName" class="control-label">Прізвище</label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
+                <label asp-for="PhoneNumber" class="control-label">Номер телефону</label>
                 <input asp-for="PhoneNumber" class="form-control" type="tel" pattern="[0-9]+" title="Please enter numbers only" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
+                <label asp-for="BirthDate" class="control-label">Дата народження</label>
                 <input asp-for="BirthDate" class="form-control" type="date" />
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Nationality" class="control-label"></label>
+                <label asp-for="Nationality" class="control-label">Національність</label>
                 <input asp-for="Nationality" class="form-control" />
                 <span asp-validation-for="Nationality" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
+                <label asp-for="Gender" class="control-label">Гендер</label>
                 <input asp-for="Gender" class="form-control" />
                 <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="ResidentialAddress" class="control-label"></label>
+                <label asp-for="ResidentialAddress" class="control-label">Місце проживання</label>
                 <input asp-for="ResidentialAddress" class="form-control" />
                 <span asp-validation-for="ResidentialAddress" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Update profile" class="btn btn-primary" />
+                <input type="submit" value="Зберегти" class="btn btn-primary" />
             </div>
         </form>
+
+        <div class="back-button-container">
+            <a asp-action="MyProfile" asp-controller="Account" class="btn btn-back">Назад</a>
+        </div>
     </div>
 </div>
+
+<footer class="footer-nav">
+    <div class="container">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Contacts" asp-action="Index">Контакти</a>
+            </li>
+            <li class="footer-divider">|</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Terms" asp-action="Index">Умови використання</a>
+            </li>
+            <li class="footer-divider">|</li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Політика конфіденційності</a>
+            </li>
+        </ul>
+    </div>
+</footer>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        document.getElementById("profileForm").addEventListener("submit", function(event) {
+        document.getElementById("profileForm").addEventListener("submit", function (event) {
             var phoneNumber = document.querySelector('input[name="PhoneNumber"]').value;
             var birthDate = document.querySelector('input[name="BirthDate"]').value;
 
